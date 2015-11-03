@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="jQuery/ui/css/jquery-ui.css">
+    <script src="jQuery/jquery-2.1.1.min.js"></script>
+    <script src="jQuery/ui/jquery-ui.1.11.0.min.js"></script>
+
+    <style>
+        .selectable .ui-selecting {
+            background: #FECA40;
+        }
+
+        .selectable .ui-selected {
+            background: #F39814;
+            color: white;
+        }
+
+        .selectable {
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+            height: 300px;
+        }
+
+        .selectable li {
+            margin: 2px;
+            width: 200px;
+            padding: 3px;
+            background-color: #cecece;
+        }
+
+        .container {
+            width: 300px;
+            min-height: 500px;
+            float: left;
+            border: 1px solid black;
+            background-color: #efefef;
+        }
+
+        .drop-hover {
+            opacity: 0.5;
+        }
+    </style>
+
+    <script src="select-drag-drop.js"></script>
+</head>
+<body>
+<div class="container">
+    <ul class="selectable">
+        <li class="ui-widget-content">Item 1</li>
+        <li class="ui-widget-content">Item 2</li>
+        <li class="ui-widget-content">Item 3</li>
+        <li class="ui-widget-content">Item 4</li>
+        <li class="ui-widget-content">Item 5</li>
+        <li class="ui-widget-content">Item 6</li>
+        <li class="ui-widget-content">Item 7</li>
+        <li class="ui-widget-content">Item 8</li>
+        <li class="ui-widget-content">Item 9</li>
+        <li class="ui-widget-content">Item 10</li>
+        <li class="ui-widget-content">Item 11</li>
+        <li class="ui-widget-content">Item 12</li>
+    </ul>
+</div>
+
+<div class="container">
+    <ul class="selectable">
+        <li class="ui-widget-content">Item 13</li>
+    </ul>
+</div>
+
+</body>
+</html>
