@@ -6,51 +6,48 @@ function init() {
 
     $(".selectable").selectable({
         filter: "li",
-        start: clearOtherContainers,
-        stop: toggleDraggable
-    });
+        //start: clearOtherContainers,
+        cancel: "li.ui-selected"
 
-    $(".selectable li").draggable({
-        helper: draggableHelper,
-        drag: onDrag,
-        disabled: true
+    }).sortable({
+        helper: sortableHelper,
+        connectWith: ".connect",
+        cancel: "li:not(.ui-selected)",
+        activate: onActivate,
+        //start: onStart,
+        //stop: onStop
     });
+}
 
-    $(".container").droppable({
-        drop: onDrop,
-        hoverClass: "drop-hover"
-    });
+function onActivate(e, ui) {
+    console.log("activate");
+    //console.log($(".ui-selected:not(.cloned):not(.ui-sortable-placeholder)").not(ui.item));
+    ui.item.siblings(".ui-selected:not(.ui-sortable-placeholder)").hide();
+}
+
+function onStart(e, ui) {
+    console.log("start");
 }
 
 function clearOtherContainers() {
     $(".ui-selected").not($(this).find(".ui-selected")).removeClass("ui-selected");
 }
 
-function toggleDraggable() {
-    $(".selectable li").each(function () {
-        var $this = $(this);
-        $this.draggable("option", "disabled", !$this.hasClass("ui-selected"));
-    });
+function sortableHelper(e, ui) {
+    console.log("helper");
+    return $("<ul class='selectable helper'/>").append(ui.siblings(".ui-selected").addBack().clone().addClass("cloned"));
 }
 
-function onDrag(e, ui) {
-    console.log(ui.position);
-    console.log(ui.offset);
-}
+function onStop(e, ui) {
+    $(".helper").remove();
 
-function draggableHelper() {
-    return $("<ul class='selectable cloned'/>").append($(".ui-selected").clone());
-}
-
-function onDrop(e, ui) {
-    $(".cloned").remove();
-
+    console.log("onBeforeStop");
+    console.log(ui.item);
     var $selected = $(".ui-selected").removeClass("ui-selected");
-    $(this).find("ul").append($selected);
+    //$(this).find("ul").append($selected);
 
     reset();
 }
 
 function reset() {
-    init();
 }
