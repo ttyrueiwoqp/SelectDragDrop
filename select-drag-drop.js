@@ -4,13 +4,13 @@ $(function () {
 
 function init() {
 
-    $(".selectable").selectable({
+    $(".select-sortable").selectable({
         filter: "li",
         cancel: "li.ui-selected",
         start: clearOtherContainers
 
     }).sortable({
-        connectWith: ".connect",
+        connectWith: ".select-sortable",
         helper: sortableHelper,
         activate: onActivate,
         beforeStop: onBeforeStop
@@ -22,20 +22,21 @@ function clearOtherContainers(e, ui) {
 }
 
 function sortableHelper(e, ui) {
-    var $clone = ui.siblings(".ui-selected").addBack().clone().addClass("clone");
-    return $("<ul class='selectable'/>").append($clone);
+    var $selectedClone = ui.siblings(".ui-selected").addBack().clone().addClass("ui-selected-clone");
+    var $parentClone = ui.parent().clone();
+    return $parentClone.empty().append($selectedClone);
 }
 
 function onActivate(e, ui) {
-    // Not remove() because jquery-ui assumes only one item is dragged,
+    // Not remove() because jquery-ui assumes only one item is dragged
     // Removing the rest will cause exception
     // Only remove() on stop
-    ui.item.siblings(".ui-selected:not(.ui-sortable-placeholder)").addClass("hidden-sibling").hide();
+    ui.item.siblings(".ui-selected:not(.ui-sortable-placeholder)").addClass("ui-selected-hidden-sibling").hide();
 }
 
 function onBeforeStop(e, ui) {
-    var $clone = $(".clone").removeClass("clone");
-    ui.item.after($clone).remove();
-    $(".hidden-sibling").remove();
+    var $selectedClone = $(".ui-selected-clone").removeClass("ui-selected-clone");
+    ui.item.after($selectedClone).remove();
+    $(".ui-selected-hidden-sibling").remove();
     $(".ui-selected").removeClass("ui-selected");
 }
