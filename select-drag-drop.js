@@ -6,48 +6,36 @@ function init() {
 
     $(".selectable").selectable({
         filter: "li",
-        //start: clearOtherContainers,
-        cancel: "li.ui-selected"
+        cancel: "li.ui-selected",
+        start: clearOtherContainers
 
     }).sortable({
-        helper: sortableHelper,
         connectWith: ".connect",
-        cancel: "li:not(.ui-selected)",
+        helper: sortableHelper,
         activate: onActivate,
-        //start: onStart,
-        //stop: onStop
+        beforeStop: onBeforeStop
     });
 }
 
-function onActivate(e, ui) {
-    console.log("activate");
-    //console.log($(".ui-selected:not(.cloned):not(.ui-sortable-placeholder)").not(ui.item));
-    ui.item.siblings(".ui-selected:not(.ui-sortable-placeholder)").hide();
-}
-
-function onStart(e, ui) {
-    console.log("start");
-}
-
-function clearOtherContainers() {
+function clearOtherContainers(e, ui) {
     $(".ui-selected").not($(this).find(".ui-selected")).removeClass("ui-selected");
 }
 
 function sortableHelper(e, ui) {
-    console.log("helper");
-    return $("<ul class='selectable helper'/>").append(ui.siblings(".ui-selected").addBack().clone().addClass("cloned"));
+    var $clone = ui.siblings(".ui-selected").addBack().clone().addClass("clone");
+    return $("<ul class='selectable'/>").append($clone);
 }
 
-function onStop(e, ui) {
-    $(".helper").remove();
-
-    console.log("onBeforeStop");
-    console.log(ui.item);
-    var $selected = $(".ui-selected").removeClass("ui-selected");
-    //$(this).find("ul").append($selected);
-
-    reset();
+function onActivate(e, ui) {
+    // Not remove() because jquery-ui assumes only one item is dragged,
+    // Removing the rest will cause exception
+    // Only remove() on stop
+    ui.item.siblings(".ui-selected:not(.ui-sortable-placeholder)").addClass("hidden-sibling").hide();
 }
 
-function reset() {
+function onBeforeStop(e, ui) {
+    var $clone = $(".clone").removeClass("clone");
+    ui.item.after($clone).remove();
+    $(".hidden-sibling").remove();
+    $(".ui-selected").removeClass("ui-selected");
 }
